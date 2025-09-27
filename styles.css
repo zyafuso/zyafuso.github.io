@@ -1,3 +1,86 @@
+/* Code Snippet Comparison Layout */
+.code-compare {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: stretch;
+    margin: 1.5rem 0;
+    width: 100%;
+    max-width: 100vw;
+}
+
+.code-block {
+    background: #181a1b;
+    color: #e2e2e3;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+    font-size: 0.85em;
+    padding: 0;
+    border-radius: 15px;
+    border: 2px solid #e7c664;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: pre;
+    text-align: left;
+    margin: 0;
+    box-sizing: border-box;
+    line-height: 0.9;
+}
+
+.code-block pre {
+    margin: 0;
+    padding: 0.6rem;
+    background: #181a1b !important;
+    border-radius: 15px;
+}
+
+.code-block pre code {
+    background: #181a1b !important;
+}
+
+pre {
+    line-height: 0.9;
+    margin: 1rem 0;
+}
+
+pre code {
+    line-height: 0.9;
+}
+
+/* Code syntax highlighting (simple) */
+.code-block .kw { color: #9ed072; font-weight: 600; }
+.code-block .fn { color: #e7c664; font-weight: 600; }
+.code-block .cm { color: #7fa7d6; font-style: italic; }
+.code-block .va { color: #b8e68a; }
+.code-block .num { color: #e7c664; }
+
+.code-block-title {
+    font-size: 1em;
+    color: #e7c664;
+    margin-bottom: 0.4em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+/* Terminal Output Style */
+.terminal-output {
+    background: #181a1b;
+    color: #9ed072;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+    font-size: 0.9em;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1.5px solid #e7c664;
+    margin: 1rem 0;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    box-shadow: 0 2px 12px rgba(231,198,100,0.07);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    line-height: 1.4;
+}
+
 /* Reset and base styles */
 * {
     margin: 0;
@@ -331,18 +414,53 @@ body {
 
 /* Image Sections */
 .content-section {
-    margin-bottom: 4rem;
-    padding: 2rem;
+    margin-bottom: 3rem;
+    padding: 1.5rem;
     background: #2c2e34;
-    border-radius: 20px;
+    border-radius: 15px;
     border: 2px solid #9ed072;
 }
 
 .content-section h3 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: #9ed072;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-align: center;
+}
+
+.content-section h4 {
+    font-size: 1.4rem;
+    color: #e7c664;
+    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+}
+
+.content-section h5 {
+    font-size: 1.2rem;
+    color: #e7c664;
+    margin-bottom: 0.8rem;
+    margin-top: 1rem;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.content-section h6 {
+    font-size: 1rem;
+    color: #e7c664;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+/* Level captions for grids */
+.level-caption {
+    color: #e7c664;
+    font-weight: 600;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    margin: 0.5rem 0;
 }
 
 /* Image Pairs (Kai and Wurster) */
@@ -377,27 +495,30 @@ body {
 }
 
 .content-caption {
-    color: #9ed072;
-    font-size: 1.2rem;
-    font-weight: 600;
+    color: #e7c664;
+    font-size: 1rem;
+    font-weight: 500;
     margin-bottom: 0.5rem;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
 }
 
 .section-description {
-    margin-top: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     text-align: left;
-    padding: 1.5rem;
+    padding: 1rem;
     background: rgba(158, 208, 114, 0.05);
-    border-radius: 15px;
+    border-radius: 10px;
     border: 1px solid rgba(158, 208, 114, 0.2);
 }
 
 .section-description p {
     color: #e2e2e3;
-    font-size: 1.2rem;
-    line-height: 1.7;
+    font-size: 1.1rem;
+    line-height: 1.6;
     margin: 0;
-    max-width: 800px;
+    max-width: 1000px;
 }
 
 /* Pappy Container - Side by Side Layout */

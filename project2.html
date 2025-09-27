@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 2 - CS180 Website</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">zyafuso.github.io</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">Project 2</h1>
+            </div>
+        </section>
+
+        <section class="project-content">
+            <div class="container">
+                <div class="project-container">
+                    <!-- Title Section -->
+                    <div class="project-intro">
+                        <h2>Image Filtering and Hybrid Images</h2>
+                        <p>This project explores image filtering techniques including convolution, edge detection, Gaussian filters, and hybrid image creation. The implementation covers both basic filtering operations and advanced applications like unsharp masking and multi-scale blending.</p>
+                    </div>
+
+                    <!-- Basic Convolution Introduction -->
+                    <div class="content-section">
+                        <h3>Basic Convolution Implementation</h3>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj2/selfie_grayscale_convolve2d_naive_box.jpg" alt="Box Filter (Naive)" class="content-image clickable-image">
+                                <p class="content-caption">Box Filter (Naive Implementation)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/selfie_grayscale_convolve_box.jpg" alt="Box Filter (Fast)" class="content-image clickable-image">
+                                <p class="content-caption">Box Filter (Scipy Implementation)</p>
+                            </div>
+                        </div>
+                        <div class="code-block">
+<pre><code class="language-python">def convolve2d_naive(image, kernel):
+    H, W = image.shape
+    kH, kW = kernel.shape
+    pad_h, pad_w = kH // 2, kW // 2
+    padded = np.pad(image, ((pad_h, pad_h), (pad_w, pad_w)), mode='constant')
+    output = np.zeros_like(image)
+    for i in range(H):
+        for j in range(W):
+            entry = 0
+            for k in range(kH):
+                for l in range(kW):
+                    entry += padded[i+k, j+l] * kernel[k, l]
+            output[i, j] = entry
+    return output</code></pre>
+                        </div>
+                        
+                        <div class="code-block">
+<pre><code class="language-python">def convolve2d_fast(image, kernel):
+    H, W = image.shape
+    kH, kW = kernel.shape
+    pad_h, pad_w = kH // 2, kW // 2
+    padded = np.pad(image, ((pad_h, pad_h), (pad_w, pad_w)), mode='constant')
+    output = np.zeros_like(image)
+    for i in range(H):
+        for j in range(W):
+            region = padded[i:i+kH, j:j+kW]
+            output[i, j] = np.sum(region * kernel)
+    return output</code></pre>
+                        </div>
+                        
+                        <div class="terminal-output">
+~File size: 55500 bytes
+Naive (four loops): 11409.28 ms
+Fast (two loops): 2263.60 ms  
+Scipy: 69.71 ms
+
+Both of the implementations that involve iterating over the numpy array are inefficient. Vectorizing data provides massive efficiency gains, displayed by the fast vs naive implementation.
+                        </div>
+                        <div class="section-description">
+                            <h4>Box Filter Application</h4>
+                            <p>Above are some basic implementations of convolution, a standard process in image processing. Below are some examples of what convolution can be used for. In short, convolution multiplies a kernel or small array to sections of an image. Every pixel after a convolution is a representation of the data produced by this kernel image multiplication.  For my convolutions, boundaries are zero-padded which will induce a vignette look to the edges. For the Scipy convolution function I used the symmetric boundaries which gives much cleaner edges because it is not convolving with the zero padding.
+                            <br><br>If you look closely at the two convolutions below, one has a uniform dark edge while the other does not.</p>
+                        </div>                                        
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj2/selfie_grayscale_convolve2d_fast_Dx.jpg" alt="Finite Difference Dx" class="content-image clickable-image">
+                                <p class="content-caption">Finite Difference Dx (Vertical Edges)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/selfie_grayscale_convolve2d_fast_Dy.jpg" alt="Finite Difference Dy" class="content-image clickable-image">
+                                <p class="content-caption">Finite Difference Dy (Horizontal Edges)</p>
+                            </div>
+                        </div>                   
+                        <div class="section-description">
+                            <h4>Finite Difference Operators</h4>
+                            <p>Convolving with difference operators highlights edges in the photo, we can take advantage of this principle to find outlines in images.</p>
+                        </div>
+                    </div>
+                    <div class="content-section">
+                        <h3>Gaussian and Difference Operators</h3>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj2/cameraman_grayscale.jpg" alt="Original Cameraman" class="content-image clickable-image">
+                                <p class="content-caption">Original Cameraman Image</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/cameraman_grayscale_convolve_gaussian.jpg" alt="Gaussian Filtered" class="content-image clickable-image">
+                                <p class="content-caption">Gaussian Filtered</p>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <p>Here we will experiment with what different convolutions do. We've seen the effects of a finite difference operator, but what else can we do? A gaussian is similar to a box filter, effectively averaging every pixel with its neighbor. The visual effect is a blur and the reduction of high frequencies in the image. We will get to what that means later.</p>
+                        </div>
+                        
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj2/cameraman_grayscale_convolve_Dx.jpg" alt="Partial Derivative Dx" class="content-image clickable-image">
+                                <p class="content-caption">Partial Derivative Dx</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/cameraman_grayscale_convolve_Dy.jpg" alt="Partial Derivative Dy" class="content-image clickable-image">
+                                <p class="content-caption">Partial Derivative Dy</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/cameraman_grayscale_gradient_mag.jpg" alt="Gradient Magnitude" class="content-image clickable-image">
+                                <p class="content-caption">Gradient Magnitude</p>
+                            </div>
+                        </div>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj2/cameraman_grayscale_gradient_magnitude_alt.jpg" alt="Gradient Magnitude Alt" class="content-image clickable-image">
+                                <p class="content-caption">Binarized Edge (DoG Convolution)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/cameraman_grayscale_convolve_gaussian_gradient_magnitude_binarized_edge.jpg" alt="Binarized Edge Image" class="content-image clickable-image">
+                                <p class="content-caption">Binarized Edge (Blur then Finite Difference Convolution)</p>
+                            </div>     
+                        </div>                       
+                        <div class="section-description">
+                            <p>A gradient magnitude displays both the vertical and horizontal edges in an image. Edge detection can be useful for sensing, but these gradient magnitude images have too much noise. There is no way to pick out an edge from a blade of grass in this filtered image. To fix this, we set a flat intensity filter to eliminate noise pass everything else. We have created a binarized edge map.</p>
+                            <p><br><br>One way to achieve the gradient magnitude is to first blur with the gaussian and then apply the finite difference operators. Somewhat unsurprisingly, you end with the same result if you convolve the directional derivative of gaussians instead.</p>
+                        </div>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj2/DoGx.jpg" alt="DoG Filter X" class="content-image clickable-image" style="width: 400px; height: 400px; object-fit: contain;">
+                                <p class="content-caption">DoG Filter X</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/DoGy.jpg" alt="DoG Filter Y" class="content-image clickable-image" style="width: 400px; height: 400px; object-fit: contain;">
+                                <p class="content-caption">DoG Filter Y</p>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <p>The 'Derivative of Gaussian' filters above are a visual representation of what it looks like to convolve a gaussian filter with a finite difference operator. The gray pixels represent neutral 0 values, the white represent max values and the black are minimum negative values.</p>
+                        </div>
+                    </div>
+                </div>
+
+                    <!-- Part 2.1: Unsharp Mask Filter -->
+                    <div class="content-section">
+                        <h3>Part 2.1: Image "Sharpening"</h3>
+                        <p>Sharpening images once we have a gaussian filter is easy. The gaussian takes the low frequencies of an image. So after subtracting out the gaussian, we are left with high frequencies. This can be added back for a boosted high frequency and "sharper" image.</p>
+                        
+                        
+                        <div class="section-description">
+                            <h4>Sharpening Blurry Images</h4>
+                            <p>When we sharpen images, alpha is the value that will scale the high frequencies we are adding back to the image.</p>
+                        </div>
+                        
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj2/taj.jpg" alt="Original Taj Mahal" class="content-image clickable-image">
+                                <p class="content-caption">Original Taj Mahal</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/taj_sharp_mask_alpha1.5.jpg" alt="Sharp Mask" class="content-image clickable-image">
+                                <p class="content-caption">Sharp Mask (High Frequencies)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/taj_sharpen_alpha1.5.jpg" alt="Sharpened Taj Mahal" class="content-image clickable-image">
+                                <p class="content-caption">Sharpened Taj Mahal (α=1.5)</p>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <h4>Intentional Blur</h4>
+                            <p>For this image, I intentionally blur before applying the sharpening mask. This removes high frequencies from the image so when I try to add back the high frequencies, I end up with a noisier and grainy looking image. Interestingly, this image has lots of sharp edges and therefore high frequencies so the sharpening has an even more apparent effect.</p>
+                        </div>
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj2/arashiyama.JPG" alt="Original Arashiyama" class="content-image clickable-image">
+                                <p class="content-caption">Original Arashiyama</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/arashiyama_convolve_color.jpg" alt="Blurred Arashiyama" class="content-image clickable-image">
+                                <p class="content-caption">Arashiyama(after blur)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/arashiyama_convolve_color_sharpen_alpha4.0.jpg" alt="Sharpened Arashiyama" class="content-image clickable-image">
+                                <p class="content-caption">Sharpened Arashiyama(α=4.0)</p>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <h5>Sharpening Process Comparison</h5>
+                            <p>Here we can see what varying alpha does. High frequencies are always there, but less visible than lower frequencies and show up in the form of fine details and sharp edges. Boosting alpha just makes the high frequencies that get picked up more apparent.</p>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+                                <div style="text-align: center;">
+                                    <h6 style="color: #e7c664; margin-bottom: 0.5rem;">Original Image</h6>
+                                </div>
+                                <div style="text-align: center;">
+                                    <h6 style="color: #e7c664; margin-bottom: 0.5rem;">Sharp Mask (High Frequencies)</h6>
+                                </div>
+                                <div style="text-align: center;">
+                                    <h6 style="color: #e7c664; margin-bottom: 0.5rem;">Sharpened Result</h6>
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+                                <div style="text-align: center;">
+                                    <img src="proj2/minion_lock.JPG" alt="Original Minion α=1.5" class="content-image clickable-image">
+                                    <p class="content-caption">Original (α=1.5)</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <img src="proj2/minion_lock_sharp_mask_alpha1.5.jpg" alt="Minion Sharp Mask α=1.5" class="content-image clickable-image">
+                                    <p class="content-caption">Sharp Mask (α=1.5)</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <img src="proj2/minion_lock_sharpen_alpha1.5.jpg" alt="Minion Sharpened α=1.5" class="content-image clickable-image">
+                                    <p class="content-caption">Sharpened (α=1.5)</p>
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+                                <div style="text-align: center;">
+                                    <img src="proj2/minion_lock.JPG" alt="Original Minion α=10.0" class="content-image clickable-image">
+                                    <p class="content-caption">Original (α=10.0)</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <img src="proj2/minion_lock_sharpen_alpha10.0_mask.jpg" alt="Minion Sharp Mask α=10.0" class="content-image clickable-image">
+                                    <p class="content-caption">Sharp Mask (α=10.0)</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <img src="proj2/minion_lock_sharpen_alpha10.0.jpg" alt="Minion Sharpened α=10.0" class="content-image clickable-image">
+                                    <p class="content-caption">Sharpened (α=10.0)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Part 2.2: Hybrid Images -->
+                    <div class="content-section">
+                        <h3>Part 2.2: Hybrid Images</h3>
+                        <div class="section-description">
+                            <p>The images shown below are hybrid images created by blending low and high frequencies of similar images. High frequencies contain detail and will be apparent but when you blur you vision or look from further away, high frequencies tend to be harder to recognize and the low frequencies will become clearer. The idea behind these hybrids is exactly this.<br><br>
+                            For the best results when creating these hybrid images, the low frequency image should have a strong shape and outline while the high frequency image should contain fine details. A good example of this is Derek and Nutmeg. Nutmegs fur and expressions show up through Derek's outline because the higher frequencies contain the detail of Nutmeg.</p>
+                        </div>
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj2/hybrid_python/DerekPicture.jpg" alt="Derek Original" class="content-image clickable-image">
+                                <p class="content-caption">Derek Original</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/hybrid_python/nutmeg.jpg" alt="Nutmeg Original" class="content-image clickable-image">
+                                <p class="content-caption">Nutmeg Original</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/hybrid_python/derek_nutmeg_12.jpg" alt="Derek Nutmeg Blend" class="content-image clickable-image">
+                                <p class="content-caption">Deremeg</p>
+                            </div>
+                        </div>
+                        
+                        <div class="section-description">
+                            <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/max.jpg" alt="Max Original" class="content-image clickable-image" style="width: 220px; height: 250px; object-fit: contain;">
+                                    <p class="content-caption">Max</p>
+                                </div>
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/shervin.jpg" alt="Shervin Original"  class="content-image clickable-image" style="width: 220px; height: 250px; object-fit: contain;">
+                                    <p class="content-caption">Shervin</p>
+                                </div>
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/full process/hybrid.jpg" alt="Max + Shervin Hybrid" class="content-image clickable-image" style="width: 220px; height: 250px; object-fit: contain;">
+                                    <p class="content-caption">Max + Shervin</p>
+                                </div>
+                            </div>
+                            
+                            <div class="comparison-grid">
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/full process/high.jpg" alt="Max Filtered High" class="content-image clickable-image" style="width: 220px; height: 250px; object-fit: contain;">
+                                    <p class="content-caption">Max Filtered (High-pass)</p>
+                                </div>
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/full process/low.jpg" alt="Shervin Filtered Low" class="content-image clickable-image" style="width: 220px; height: 250px; object-fit: contain;">
+                                    <p class="content-caption">Shervin Filtered (Low-pass)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <p>I think this blend worked well because I was able to find similar facial expressions, hair, and angle. The more similar the subjects are, the easier it is to blend them with this method.</p>
+                        </div>
+                        <div class="section-description">
+                            <h4>Fourier Transform</h4>
+                            <p>Below is a visual representation of the frequencies contained in the Max and Shervin images. The center of the graph contains low frequencies, and higher frequencies are represented by everything else.</p>
+                        </div>
+                        
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj2/hybrid_python/full process/ffthigh.jpg" alt="Max Fourier Transform" class="content-image clickable-image">
+                                <p class="content-caption">Max Fourier Transform</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/hybrid_python/full process/fftlow.jpg" alt="Shervin Fourier Transform" class="content-image clickable-image">
+                                <p class="content-caption">Shervin Fourier Transform</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj2/hybrid_python/full process/fft2d.jpg" alt="Hybrid Fourier Transform" class="content-image clickable-image">
+                                <p class="content-caption">Hybrid Fourier Transform</p>
+                            </div>
+                        </div>
+
+                        <div class="section-description">
+                            <p>After applying a gaussian blur to shervin, the high frequencies are almost entirely removed. Conversely, Max's fourier transform graph contains mostly high frequencies and the strong low frequencies have been dampered.</p>
+                        </div>
+                    <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <div class="comparison-item">
+                        <img src="proj2/hybrid_python/cat_seal_15.jpg" alt="Sat" class="content-image clickable-image">
+                        <p class="content-caption">Cat Seal</p>
+                        </div>
+                        <div class="comparison-item">
+                            <img src="proj2/hybrid_python/huh.jpg" alt="Huh" class="content-image clickable-image">
+                            <p class="content-caption">Cat</p>
+                        </div>
+                        <div class="comparison-item">
+                            <img src="proj2/hybrid_python/seal.jpg" alt="Seal" class="content-image clickable-image">
+                            <p class="content-caption">Seal</p>
+                        </div>
+                    </div>
+                </div>
+
+                    <!-- Part 2.3: Multiresolution Blending -->
+                    <div class="content-section">
+                        <h3>Part 2.3: Multiresolution Blending</h3>
+                        <p>Gaussian stacks are stages of frequencies obtained by applying a stronger gaussian at each stage. Laplacian stacks are band passes of frequencies that can be obtained by finding the differences between stages of a gaussian stack. These blends explore how to use these image stacks to create a cleaner hybrid.</p>
+                        
+                        <div class="section-description">
+                            <h4>Orange + Apple Multiresolution Blending</h4>        
+                            <div class="comparison-grid">
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/orange.jpeg" alt="Orange Original" class="content-image clickable-image">
+                                    <p class="content-caption">Orange Original</p>
+                                </div>
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/apple.jpeg" alt="Apple Original" class="content-image clickable-image">
+                                    <p class="content-caption">Apple Original</p>
+                                </div>
+                            </div>
+                            
+                            <div class="section-description">
+                                <h5>Laplacian Stacks Comparison</h5>
+                                <p>This is a visual representation of what a Laplacian stack looks like. Each level represents a band pass of frequencies with level 3 being the last level containing every low frequency left. By applying the gaussian stack of masks to these images each band of frequency is blended differently. Coarse(low) frequencies have a gradual blend and fine details or high frequencies have a more abrupt cutoff. This technique is known as a spline.</p>
+                                
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+                                    <div style="text-align: center;">
+                                        <h6 style="color: #e7c664; margin-bottom: 0.5rem;">Orange Laplacian</h6>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <h6 style="color: #e7c664; margin-bottom: 0.5rem;">Apple Laplacian</h6>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <h6 style="color: #e7c664; margin-bottom: 0.5rem;">Combined Result</h6>
+                                    </div>
+                                </div>
+                                
+                                <div class="level-caption">Level 0</div>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/im1_layer_0.jpg" alt="Orange Level 0" class="content-image clickable-image">
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/im2_layer_0.jpg" alt="Apple Level 0" class="content-image clickable-image">
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/sum_layer_0.jpg" alt="Combined Level 0" class="content-image clickable-image">
+                                    </div>
+                                </div>
+                                
+                                <div class="level-caption">Level 1</div>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/im1_layer_1.jpg" alt="Orange Level 1" class="content-image clickable-image">
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/im2_layer_1.jpg" alt="Apple Level 1" class="content-image clickable-image">
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/sum_layer_1.jpg" alt="Combined Level 1" class="content-image clickable-image">
+                                    </div>
+                                </div>
+                                
+                                <div class="level-caption">Level 2</div>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/im1_layer_2.jpg" alt="Orange Level 2" class="content-image clickable-image">
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/im2_layer_2.jpg" alt="Apple Level 2" class="content-image clickable-image">
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/sum_layer_2.jpg" alt="Combined Level 2" class="content-image clickable-image">
+                                    </div>
+                                </div>
+                                
+                                <div class="level-caption">Level 3</div>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/im1_layer_3.jpg" alt="Orange Level 3" class="content-image clickable-image">
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/im2_layer_3.jpg" alt="Apple Level 3" class="content-image clickable-image">
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <img src="proj2/hybrid_python/oraple_laplacian/sum_layer_3.jpg" alt="Combined Level 3" class="content-image clickable-image">
+                                    </div>
+                                </div>
+                                
+                                <div style="text-align: center; margin: 2rem 0;">
+                                    <h6 style="color: #e7c664; margin-bottom: 1rem;">Final Result</h6>
+                                </div>
+                                <div class="comparison-grid">
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/orange.jpeg" alt="Orange Original" class="content-image clickable-image">
+                                        <p class="content-caption">Orange Original</p>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/apple.jpeg" alt="Apple Original" class="content-image clickable-image">
+                                        <p class="content-caption">Apple Original</p>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/oraple_centered.jpg" alt="Oraple Final" class="content-image clickable-image">
+                                        <p class="content-caption">Oraple Final Result</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-description">
+                            <h4>Kiwi + Melon Multiresolution Blending</h4>             
+                            <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/kiwi.jpg" alt="Kiwi Original" class="content-image clickable-image">
+                                    <p class="content-caption">Kiwi Original</p>
+                                </div>
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/watermelon.jpg" alt="Watermelon Original" class="content-image clickable-image">
+                                    <p class="content-caption">Watermelon Original</p>
+                                </div>
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/kiwimelon/splice.jpg" alt="Kiwimelon" class="content-image clickable-image">
+                                    <p class="content-caption">Kiwimelon</p>
+                                </div>
+                            </div>
+                            
+                            <div class="section-description">
+                                <h5>Kiwi Laplacian Stack</h5>
+                                <div class="comparison-grid">
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im1_layer_0.jpg" alt="Kiwi Gaussian Level 0" class="content-image clickable-image">
+                                        <p class="content-caption">Level 0</p>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im1_layer_1.jpg" alt="Kiwi Gaussian Level 1" class="content-image clickable-image">
+                                        <p class="content-caption">Level 1</p>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im1_layer_2.jpg" alt="Kiwi Gaussian Level 2" class="content-image clickable-image">
+                                        <p class="content-caption">Level 2</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="comparison-grid">
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im1_layer_3.jpg" alt="Kiwi Gaussian Level 3" class="content-image clickable-image">
+                                        <p class="content-caption">Level 3</p>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im1_layer_4.jpg" alt="Kiwi Gaussian Level 4" class="content-image clickable-image">
+                                        <p class="content-caption">Level 4</p>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im1_layer_5.jpg" alt="Kiwi Gaussian Level 5" class="content-image clickable-image">
+                                        <p class="content-caption">Level 5</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="section-description">
+                                <h5>Watermelon Laplacian Stack</h5>
+                                <div class="comparison-grid">
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im2_layer_0.jpg" alt="Watermelon Laplacian Level 0" class="content-image clickable-image">
+                                        <p class="content-caption">Level 0</p>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im2_layer_1.jpg" alt="Watermelon Laplacian Level 1" class="content-image clickable-image">
+                                        <p class="content-caption">Level 1</p>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im2_layer_2.jpg" alt="Watermelon Laplacian Level 2" class="content-image clickable-image">
+                                        <p class="content-caption">Level 2</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="comparison-grid">
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im2_layer_3.jpg" alt="Watermelon Laplacian Level 3" class="content-image clickable-image">
+                                        <p class="content-caption">Level 3</p>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im2_layer_4.jpg" alt="Watermelon Laplacian Level 4" class="content-image clickable-image">
+                                        <p class="content-caption">Level 4</p>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <img src="proj2/hybrid_python/kiwimelon/im2_layer_5.jpg" alt="Watermelon Laplacian Level 5" class="content-image clickable-image">
+                                        <p class="content-caption">Level 5</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <h4>Portal Multiresolution Blending</h4>
+                            <p>I tried to make this blurred and spinning image I took of the Tori gates blend into a new scene. The idea was to create a "portal to another world" feel.</p>
+                            <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/portal_2/splice.jpg" alt="Portal Final Result" class="content-image clickable-image">
+                                    <p class="content-caption">Portal Final Result</p>
+                                </div>
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/tori_gates.JPG" alt="tori_gates" class="content-image clickable-image">
+                                    <p class="content-caption">Spinning Tori Gates</p>
+                                </div>
+                                <div class="comparison-item">
+                                    <img src="proj2/hybrid_python/lake.jpg" alt="lake" class="content-image clickable-image">
+                                    <p class="content-caption">Lake</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Image Modal (reuse from project1 for consistency) -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+    </div>
+
+    <script src="./script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
