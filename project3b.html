@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 3B - CS180 Website</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">zyafuso.github.io</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">Project 3B: Autostitching Photo Mosaics</h1>
+                <div class="part-toggle">
+                    <button id="togglePart" class="toggle-btn">Switch to Part A</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="project-content">
+            <div class="container">
+                <div class="project-container">
+                    <!-- Project Introduction -->
+                    <div class="project-intro">
+                        <h2>Automatic Feature Detection and Matching</h2>
+                        <p>In this part I aim to automate the mosaic creation process used in the last part. This requires me to implement methods to detect correspodences. To do this we will use feature descriptors, features sorting algorithms like ANMS, and finally use RANSAC to estimate the correct homography.</p>
+                    </div>
+
+                    <!-- Part B.1: Harris Corner Detection -->
+                    <div class="content-section">
+                        <h3>Part B.1: Harris Corner Detection</h3>
+
+                        <h4>Detected Harris Corners</h4>
+                        <div class="section-description">
+                            <p>Harris corner detection is a simple algorithm that searches for large changes in intensity. It does this by computing the second moment matrix of the image and then computing the corner response function. The corner response function is computed by the determinant of the second moment matrix minus a small term times the trace of the second moment matrix squared. This is then thresholded to detect corners.
+                                <br><br>This is incredibly useful for finding correspodence points, but we don't want to have clustered points. In the images below, you can see that corners tend to appear in clusters around objects that have sharp corners. This is no good for our correspodence points because we want a large spread distance wise across the image. The larger the distance spread, the more accurate the homography. Intuitively, two corners that are very close, is not too different from a single correspondence point.
+                            </p>
+                        </div>
+
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj3/Corner Detection/Harris100.png" alt="Harris Corners 100" class="content-image clickable-image">
+                                <p class="content-caption">Harris Corners (100 points)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Corner Detection/Harris200.png" alt="Harris Corners 200" class="content-image clickable-image">
+                                <p class="content-caption">Harris Corners (200 points)</p>
+                            </div>
+                        </div>
+
+                        <h4>Adaptive Non-Maximal Suppression (ANMS)</h4>
+                        <div class="section-description">
+                            <p>ANMS solves this problem by computing a suppression radius for each corner. This radius is the minimum distance to another corner with a significantly stronger response. This ensures that we have a large spread distance wise across the image. The larger the distance spread, the more accurate the homography. Intuitively, two corners that are very close, is not too different from a single correspondence point. Below you can see the difference.</p>
+                        </div>
+
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj3/Corner Detection/Anms100.png" alt="ANMS 100" class="content-image clickable-image">
+                                <p class="content-caption">ANMS: 100 Distributed Corners</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Corner Detection/Anms200.png" alt="ANMS 200" class="content-image clickable-image">
+                                <p class="content-caption">ANMS: 200 Distributed Corners</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part B.2: Feature Descriptor Extraction -->
+                    <div class="content-section">
+                        <h3>Part B.2: Feature Descriptor Extraction</h3>
+                        <h4>Feature Descriptor Examples</h4>
+                        <div class="section-description">
+                            <p>Now we need a way to match two points in separate images. To do this, we will create feature descriptors for each point. My simple implementation is to take a 40x40 pixel window around each point, downsample to an 8x8 pixel window, and measure differences between features. Below are some example features extracted by my algorithm.
+                                <br><br> This could be made much more robust with more sophisticated algorithms, but this is a good start and worked okay for my purposes.
+                            </p>
+                        </div>
+
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj3/Corner Detection/10 features.png" alt="Feature Descriptors" class="content-image clickable-image">
+                                <p class="content-caption">Example Feature Descriptors (10 features shown)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part B.3: Feature Matching -->
+                    <div class="content-section">
+                        <h3>Part B.3: Feature Matching</h3>
+                        <h4>Feature Matches Visualization</h4>
+                        <div class="section-description">
+                            <p>To match features, we will compare each feature descriptor to every other feature in the other image. The goal is to extract the best and second best match for each feature. Then we will use the Lowe ratio to determine a 'good' match. The Lowe ration is defined as the error of the best match divided by the error of the second best match. If this ratio is less than 0.8, then we consider the match to be 'good'. Below you can see the result of my feature matching algorithm.</p>
+                        </div>
+
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj3/Corner Detection/5 Feature Matches.png" alt="Feature Matches" class="content-image clickable-image">
+                                <p class="content-caption">Feature Matches Between Image Pair</p>
+                            </div>
+                        </div>
+
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj3/Stadium/matched points.png" alt="Matched points" class="content-image clickable-image">
+                                <p class="content-caption">Matching using Lowes Ratio</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part B.4: RANSAC for Robust Homography -->
+                    <div class="content-section">
+                        <h3>Part B.4: RANSAC for Robust Homography Estimation</h3>
+                        <div class="section-description">
+                            <p>RANSAC is the last step in our mosaic creation. First, we randomly sample 4 point correspondences from our 'good' set of matches from Lowes. We do this a set number of times and compute a homography matrix from each 4 point set. For each homography, we check how many inliers there are with a set smal error threshold. If the homography is a good representation of the shift, there should be lots of inliers. 4 points that are not matches will generate homographies that are terrible represenations of the population.
+                                <br><br> We then select the homography with the most inliers and use these inliers to recompute a final homography matrix. Below you can see the 'inliers' left from running RANSAC on the Lowes set above.
+                            </p>
+                        </div>
+
+                        <h4>RANSAC Inliers</h4>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj3/Stadium/Ransac.png" alt="RANSAC Inliers" class="content-image clickable-image">
+                                <p class="content-caption">RANSAC Inliers/p>
+                            </div>
+                        </div>
+
+                        
+
+                        <h5>Seoul: Matching Challenges and RANSAC Solution</h5>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/Matching issues.png" alt="Seoul Matching Issues" class="content-image clickable-image">
+                                <p class="content-caption">Initial Feature Matches (with outliers)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/Inliers.png" alt="Seoul RANSAC Inliers" class="content-image clickable-image">
+                                <p class="content-caption">After RANSAC (inliers only)</p>
+                            </div>
+                        </div>
+                        <!-- Comparison: Manual vs Automatic Stitching -->
+                        <h4>Manual vs. Automatic Stitching Comparison</h4>
+                        <div class="section-description">
+                            <p>For the most part, automatic stitching is easier and more accurate than manual stitching unless you take the time to be pixel perfect with every correspondence. However, for my Seoul image set, the automatic stitching struggled to find any good corners. This caused RANSAC to find transformations that included outliers and inliers. This is a weakness of RANSAC, because without a lot of points, the population may not represent the true transform. However, this could likely be fixed with stronger feature descriptors. Solving for rotation invariance and scale would improve the feature matching drastically.
+                                <br><br>These images also have less overlap than my other sets of images. I was able to solve this and get the automatic stitching to work by scaling back up to a higher resolution image.
+                            </p>
+                        </div>
+
+                        <!-- Seoul Comparison -->
+                        <h5>Comparison 1: Seoul</h5>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/mosaic_seoul_23.jpg" alt="Seoul Manual Mosaic" class="content-image clickable-image">
+                                <p class="content-caption">Seoul: Manual Correspondences (Part A)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/mosaic_Seoul_23_auto.jpg" alt="Seoul Auto Mosaic" class="content-image clickable-image">
+                                <p class="content-caption">Seoul: Automatic Stitching (Part B)</p>
+                            </div>
+                        </div>
+
+                        <h5>Stadium and Tokyo Automatic Mosaic</h5>
+                        <div class="comparison-grid" style="grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem;">
+                            <div class="comparison-item" style="display: flex; flex-direction: column; align-items: center;">
+                                <img src="proj3/Stadium/mosaic_Stadium_123.jpg" alt="Stadium Auto Mosaic 123" class="content-image clickable-image" style="max-width:100%; width: 600px; height: auto;">
+                                <p class="content-caption" style="font-size: 1.1rem; margin-top: 1rem;">Stadium: Automatic Mosaic (1, 2, 3)</p>
+                            </div>
+                            <div class="comparison-item" style="display: flex; flex-direction: column; align-items: center;">
+                                <img src="proj3/Tokyo/mosaic_tokyo_213.jpg" alt="Tokyo Auto Mosaic 123" class="content-image clickable-image" style="max-width:100%; width: 600px; height: auto;">
+                                <p class="content-caption" style="font-size: 1.1rem; margin-top: 1rem;">Tokyo: Automatic Mosaic (1, 2, 3)</p>
+                            </div>
+                        </div>
+
+
+                    <!-- Navigation back to Part A -->
+                    <div class="content-section" style="text-align: center; padding: 2rem;">
+                        <h3 style="color: #9ed072; margin-bottom: 1rem;">Return to Part A</h3>
+                        <p style="color: #e2e2e3; margin-bottom: 1.5rem;">Want to review the manual mosaic creation process? Click below to return to Part A.</p>
+                        <button onclick="window.location.href='project3a.html'" class="toggle-btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                            ← Back to Part A: Manual Mosaics
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+    </div>
+
+    <script src="./script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
+

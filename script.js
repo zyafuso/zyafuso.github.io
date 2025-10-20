@@ -176,3 +176,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Project 3 Part Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.getElementById('togglePart');
+    
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+            // Get current page
+            const currentPage = window.location.pathname.split('/').pop();
+            
+            // Toggle between project3a.html and project3b.html
+            if (currentPage === 'project3a.html') {
+                window.location.href = 'project3b.html';
+            } else if (currentPage === 'project3b.html') {
+                window.location.href = 'project3a.html';
+            }
+        });
+    }
+});

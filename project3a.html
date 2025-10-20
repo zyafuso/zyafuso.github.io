@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 3A - CS180 Website</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">zyafuso.github.io</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">Project 3A</h1>
+                <div class="part-toggle">
+                    <button id="togglePart" class="toggle-btn">Switch to Part B</button>
+                </div>
+            </div>
+        </section>
+        <section class="project-content">
+            <div class="container">
+                <div class="project-container">
+                    <!-- Project Introduction -->
+                    <div class="project-intro">
+                        <h2>Image Mosaics via Projective Transformations</h2>
+                        <p>In this project, we will experiment with homographies to show the relationship between images shot from the same optical center. Using manually created image correspondences, I will project images into the same perspective and stitch images together into a *hopefully* seamless mosaic.</p>
+                    </div>
+
+                    <!-- Part A.1: Shoot the Pictures -->
+                    <div class="content-section">
+                        <h3>Part A.1: Shoot the Pictures</h3>
+                        <!-- Stadium Image Set -->
+                        <h4>Image Set 1: Stadium</h4>
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj3/Stadium/Stadium_1.jpg" alt="Stadium Image 1" class="content-image clickable-image">
+                                <p class="content-caption">Image 1</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Stadium/Stadium_2.jpg" alt="Stadium Image 2" class="content-image clickable-image">
+                                <p class="content-caption">Image 2</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Stadium/Stadium_3.jpg" alt="Stadium Image 3" class="content-image clickable-image">
+                                <p class="content-caption"> Image 3</p>
+                            </div>
+                        </div>
+                        
+
+                        <!-- Tokyo Image Set -->
+                        <h4>Image Set 2: Tokyo</h4>
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj3/Tokyo/Tokyo_1.jpg" alt="Tokyo Image 1" class="content-image clickable-image">
+                                <p class="content-caption">Image 1</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Tokyo/Tokyo_2.jpg" alt="Tokyo Image 2" class="content-image clickable-image">
+                                <p class="content-caption">Image 2</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Tokyo/Tokyo_3.jpg" alt="Tokyo Image 3" class="content-image clickable-image">
+                                <p class="content-caption">Image 3</p>
+                            </div>
+                        </div>
+
+                        <!-- Seoul Image Set -->
+                        <h4>Image Set 3: Seoul</h4>
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/Seoul_s_2.jpg" alt="Seoul Image 1" class="content-image clickable-image">
+                                <p class="content-caption">Image 1</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/Seoul_s_3.jpg" alt="Seoul Image 2" class="content-image clickable-image">
+                                <p class="content-caption">Image 2</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/Seoul_s_5.jpg" alt="Seoul Image 3" class="content-image clickable-image">
+                                <p class="content-caption">Image 3</p>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <p>Here are the three sets of images I used for this project. The stadium images were taken here at Berkeley's Memorial Stadium. I made an effort to only rotate the camera I shot the photos with. 
+                                <br><br> It is important to note that moving the camera or optical center will change the perspective projected onto the 2d image plane. Since the real world is 3D, this could cause issues with our projections. The more you move the optical center, the larger the discrepancies in the actual scene being projected onto the image plane. If the scene is different, homographies can no longer recover perspective changes.
+                                <br><br>The image sets from Tokyo and Seoul were slightly different. These were taken in Seoul's Namsan Tower and the Tokyo Tower. The optical center for these images is certainly not the same, but since the image is taken from such a distance of most of the image, the translation of the optical center is almost negligible.</p>
+                        </div>
+                    </div>
+
+                    <!-- Part A.2: Recover Homographies -->
+                    <div class="content-section">
+                        <h3>Part A.2: Recover Homographies</h3>
+
+                        <h4>Point Correspondences</h4>
+                        <div class="section-description">
+                            <p><strong>Prompt:</strong> Show visualizations of your corresponding points between image pairs. Display the points marked on each image used to compute the homography.</p>
+                        </div>
+
+                        <!-- Seoul Correspondences -->
+                        <h5>Seoul Image Correspondences</h5>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/6_points_(2).jpg" alt="Seoul 6 Points Image 2" class="content-image clickable-image">
+                                <p class="content-caption">Seoul: 6 Correspondence Points (Image 2)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/6_points_(3).jpg" alt="Seoul 6 Points Image 3" class="content-image clickable-image">
+                                <p class="content-caption">Seoul: 6 Correspondence Points (Image 3)</p>
+                            </div>
+                        </div>
+
+                        <h4>System of Equations and Recovered Homography</h4>
+                        <div class="section-description">
+                            <p>For each homography, we have 8 unknowns. We can set up a system of equations to solve for the homography. For each correspondence \((x, y) \rightarrow (u, v)\), we can generate two equations. This enforces a minimum of 4 correspondences to solve for our homography. Of course, the more correspondences the better to decrease the error in our homography. For this we will use standard least squares to solve for our homography.</p>
+                        </div>
+
+                        <div class="equation-block">
+                            <div class="matrix-display">
+                                \[
+                                H = \begin{bmatrix}
+                                h_1 & h_2 & h_3 \\
+                                h_4 & h_5 & h_6 \\
+                                h_7 & h_8 & 1
+                                \end{bmatrix}
+                                \]
+                            </div>
+                        </div>
+
+                        <div class="section-description" style="margin-top: 1.5rem;">
+                            <p style="color: #e2e2e3;">For each correspondence \((x, y) \rightarrow (u, v)\):</p>
+                        </div>
+
+                        <div class="equation-block">
+                            <div class="matrix-display">
+                                \[
+                                \begin{aligned}
+                                xh_1 + yh_2 + h_3 - xuh_7 - yuh_8 &= u \\
+                                xh_4 + yh_5 + h_6 - xvh_7 - yvh_8 &= v
+                                \end{aligned}
+                                \]
+                            </div>
+                        </div>
+
+                        <div class="section-description" style="margin-top: 1.5rem;">
+                            <p style="color: #e2e2e3;">Matrix form \(A\mathbf{h} = \mathbf{b}\):</p>
+                        </div>
+
+                        <div class="equation-block">
+                            <div class="matrix-display">
+                                \[
+                                A = \begin{bmatrix}
+                                x_1 & y_1 & 1 & 0 & 0 & 0 & -x_1u_1 & -y_1u_1 \\
+                                0 & 0 & 0 & x_1 & y_1 & 1 & -x_1v_1 & -y_1v_1 \\
+                                \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+                                x_n & y_n & 1 & 0 & 0 & 0 & -x_nu_n & -y_nu_n \\
+                                0 & 0 & 0 & x_n & y_n & 1 & -x_nv_n & -y_nv_n
+                                \end{bmatrix}
+                                \quad
+                                \mathbf{b} = \begin{bmatrix}
+                                u_1 \\ v_1 \\ \vdots \\ u_n \\ v_n
+                                \end{bmatrix}
+                                \]
+                                \[
+                                \text{Solve: } \mathbf{h} = (A^TA)^{-1}A^T\mathbf{b}
+                                \]
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part A.3: Warp the Images -->
+                    <div class="content-section">
+                        <h3>Part A.3: Warp the Images</h3>
+                        
+
+                        <h4>Interpolation Comparison: Seoul Radio Tower</h4>
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/Seoul_3_radiotower.jpg" alt="Seoul Original" class="content-image clickable-image">
+                                <p class="content-caption">Original Image</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/nn_radiotower.jpg" alt="Seoul Nearest Neighbor" class="content-image clickable-image">
+                                <p class="content-caption">Nearest Neighbor Interpolation</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/BilinearInt_radiotower.jpg" alt="Seoul Bilinear" class="content-image clickable-image">
+                                <p class="content-caption">Bilinear Interpolation</p>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <p>This displays the difference between nearest neighbor and bilinear interpolation well in my opinion. The original image is not warped, so it looks slightly different. The projections apply very different effects on the image. Bilinear interpolation appears to smooth the image which makes sense as the colors should be perfectly averaged based on distance from where they originally were. Meanwhile nearest neighbor gives a grainy look and the aliasing effects are visible. Nearest neighbor is much faster while bilinear interpolation seems to give a more "accurate" looking image, even though it is smoother.</p>
+                        </div>
+
+                        <h4>Rectification Results</h4>
+                        <div class="section-description">
+                            <p>To further test the homography and interpolation methods, I applied them to floor paterns for rectification. By manually setting the corners to map to a perfect square, we can 'look' straight down at the floor paterns.</p>
+                        </div>
+
+                        <!-- Cathedral Rectification -->
+                        <h5>Cathedral Rectification</h5>
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj3/rectifications/cathedral.JPG" alt="Cathedral Original" class="content-image clickable-image">
+                                <p class="content-caption">Original</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/rectifications/nn_cathedral.jpg" alt="Cathedral Nearest Neighbor" class="content-image clickable-image">
+                                <p class="content-caption">Rectified (Nearest Neighbor)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/rectifications/bi_cathedral.jpg" alt="Cathedral Bilinear" class="content-image clickable-image">
+                                <p class="content-caption">Rectified (Bilinear)</p>
+                            </div>
+                        </div>
+
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj3/rectifications/cathedral_square.jpg" alt="Cathedral Square Rectification" class="content-image clickable-image">
+                                <p class="content-caption">Cathedral: Floor Pattern Original</p>
+                            </div>
+                        </div>
+
+                        <!-- Platform Rectification -->
+                        <h5>Platform Rectification</h5>
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj3/rectifications/platform.JPG" alt="Platform Original" class="content-image clickable-image">
+                                <p class="content-caption">Original (Perspective View)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/rectifications/nn_platform.jpg" alt="Platform Nearest Neighbor" class="content-image clickable-image">
+                                <p class="content-caption">Rectified (Nearest Neighbor)</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/rectifications/bi_platform.jpg" alt="Platform Bilinear" class="content-image clickable-image">
+                                <p class="content-caption">Rectified (Bilinear)</p>
+                            </div>
+                        </div>
+
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj3/rectifications/platform_square.jpg" alt="Platform Square Rectification" class="content-image clickable-image">
+                                <p class="content-caption">Platform: Floor Pattern Original</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part A.4: Blend the Images into a Mosaic -->
+                    <div class="content-section">
+                        <h3>Part A.4: Blend the Images into a Mosaic</h3>
+                        <div class="section-description">
+                            <p>Finally, we will put everything together to create a mosaic. For these, I am manually setting correspondence points for each image. Refer to part A.2 for a more detailed look at this. 
+                                <br><br>I had a lot of trouble constructing mosaics with the manual point correspondence tool provided to me. The points would be incorrectly offset. This will be fixed in part B. For now, the mosaics are only two images stitched together.</p>
+                        </div>
+
+                        <!-- Mosaic 1: Stadium -->
+                        <h4>Stadium Mosaic</h4>
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj3/Stadium/Stadium_1.jpg" alt="Stadium Source 1" class="content-image clickable-image">
+                                <p class="content-caption">Image 1</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Stadium/Stadium_2.jpg" alt="Stadium Source 2" class="content-image clickable-image">
+                                <p class="content-caption">Image 2</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Stadium/mosaic_Stadium_12.jpg" alt="Stadium Source 3" class="content-image clickable-image">
+                                <p class="content-caption">Stitched Image</p>
+                            </div>
+                        </div>
+                        <!-- Mosaic 2: Tokyo -->
+                        <h4>Stadium Mosaic</h4>
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj3/Tokyo/Tokyo_2.jpg" alt="Tokyo Source " class="content-image clickable-image">
+                                <p class="content-caption">Image 2</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Tokyo/Tokyo_3.jpg" alt="Tokyo Source 2" class="content-image clickable-image">
+                                <p class="content-caption">Image 3</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Tokyo/mosaic_tokyo_23.jpg" alt="Tokyo Source 3" class="content-image clickable-image">
+                                <p class="content-caption">Stitched Image</p>
+                            </div>
+                        </div>
+
+                        <!-- Mosaic 3: Seoul -->
+
+                        <h4>Seoul Mosaic</h4>
+                        <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/Seoul_s_2.jpg" alt="Seoul Source 2" class="content-image clickable-image">
+                                <p class="content-caption">Image 2</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/Seoul_s_3.jpg" alt="Seoul Source 3" class="content-image clickable-image">
+                                <p class="content-caption">Image 3</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj3/Seoul_s/mosaic_seoul_23.jpg" alt="Seoul Source 5" class="content-image clickable-image">
+                                <p class="content-caption">Stitched Image</p>
+                            </div>
+                        </div>
+
+                        <h4>Results Discussion</h4>
+                        <div class="section-description">
+                            <p>Manual correspondences are quite accurate, but very tedious. Some of the correspondences aren't the best because getting pixel perfect correspondences takes a long time. The Tokyo mosaic has evidently the worst correspondences as there is a clear blur from correspodence error.</p>
+                        </div>
+                    </div>
+                    <!-- Navigation to Part B -->
+                    <div class="content-section" style="text-align: center; padding: 2rem;">
+                        <h3 style="color: #9ed072; margin-bottom: 1rem;">Continue to Part B</h3>
+                        <p style="color: #e2e2e3; margin-bottom: 1.5rem;">In Part B, I automate the mosaic creation process using Harris corner detection, ANMS, and RANSAC.</p>
+                        <button onclick="window.location.href='project3b.html'" class="toggle-btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                            Go to Part B: Autostitching →
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+    </div>
+
+    <script src="./script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
+

@@ -236,7 +236,7 @@ body {
 /* Page Header */
 .page-header {
     background: #2c2e34;
-    padding: 6rem 2rem 4rem;
+    padding: 6rem 2rem 2rem;
     text-align: center;
     color: #e2e2e3;
 }
@@ -672,6 +672,196 @@ body {
     height: 200px;
 }
 
+/* Project Section Styles */
+.project-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #2c2e34;
+    border-radius: 20px;
+    border: 2px solid #9ed072;
+    margin-bottom: 3rem;
+}
+
+.project-section h2 {
+    font-size: 2.2rem;
+    color: #9ed072;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    border-bottom: 2px solid #e7c664;
+    padding-bottom: 0.5rem;
+}
+
+.project-section h3 {
+    font-size: 1.6rem;
+    color: #e7c664;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+.project-section h4 {
+    font-size: 1.3rem;
+    color: #e7c664;
+    margin-bottom: 0.8rem;
+    margin-top: 1.5rem;
+}
+
+.project-section p {
+    color: #e2e2e3;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.project-section code {
+    background: #181a1b;
+    color: #e7c664;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+    font-size: 0.9em;
+}
+
+.project-section ul {
+    color: #e2e2e3;
+    line-height: 1.6;
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+}
+
+.project-section li {
+    margin-bottom: 0.5rem;
+}
+
+/* Image Grid Styles */
+.image-grid {
+    margin: 2rem 0;
+}
+
+.image-row {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.project-image {
+    max-width: 100%;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border: 2px solid #9ed072;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.project-image:hover {
+    transform: scale(1.02);
+    border-color: #e7c664;
+}
+
+/* Math Equation Styles */
+.math-equation {
+    background: #181a1b;
+    border: 2px solid #e7c664;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.math-equation p {
+    color: #e7c664;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+}
+
+.equation-block {
+    background: rgba(24, 26, 27, 0.3);
+    border-left: 3px solid #e7c664;
+    padding: 1.5rem 2rem;
+    margin: 1rem 0;
+}
+
+.equation-title {
+    color: #9ed072;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.equation {
+    color: #e7c664;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+    font-size: 1.05rem;
+    margin: 0.8rem 0;
+    padding: 0.5rem;
+    background: rgba(231, 198, 100, 0.05);
+    border-radius: 6px;
+    line-height: 1.8;
+}
+
+.equation-group {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(158, 208, 114, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid #9ed072;
+}
+
+.equation-label {
+    color: #9ed072;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+
+.matrix-display {
+    text-align: center;
+    margin: 0;
+    padding: 0.5rem 0;
+}
+
+/* MathJax styling overrides */
+.matrix-display mjx-container,
+.matrix-display mjx-container * {
+    color: #e7c664 !important;
+}
+
+.section-description mjx-container,
+.section-description mjx-container * {
+    color: #e7c664 !important;
+}
+
+/* Part Toggle Button */
+.part-toggle {
+    margin-top: 0.5rem;
+}
+
+.toggle-btn {
+    background: #e7c664;
+    color: #2c2e34;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background: #9ed072;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 198, 100, 0.3);
+}
+
 /* Responsive design for images */
 @media (max-width: 768px) {
     .hero-title {
@@ -755,5 +945,40 @@ body {
     .content-image {
         max-height: 250px;
         height: auto;
+    }
+    
+    .project-section {
+        padding: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .project-section h2 {
+        font-size: 1.8rem;
+    }
+    
+    .project-section h3 {
+        font-size: 1.4rem;
+    }
+    
+    .project-section h4 {
+        font-size: 1.2rem;
+    }
+    
+    .image-row {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .project-image {
+        max-height: 250px;
+        margin-bottom: 1rem;
+    }
+    
+    .math-equation {
+        padding: 0.8rem;
+    }
+    
+    .math-equation p {
+        font-size: 1rem;
     }
 }
