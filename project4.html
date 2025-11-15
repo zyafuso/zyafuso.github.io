@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 4 - CS180 Website</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">zyafuso.github.io</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">Project 4</h1>
+            </div>
+        </section>
+
+        <section class="project-content">
+            <div class="container">
+                <div class="project-container">
+                    <!-- Title Section -->
+                    <div class="project-intro">
+                        <h2>Neural Radiance Fields (NeRF)</h2>
+                        <p>This project explores neural radiance fields for 3D scene representation and novel view synthesis. The implementation covers camera calibration, 2D image fitting with neural fields, and multi-view NeRF training.</p>
+                    </div>
+
+                    <!-- Part 0: Camera Calibration and 3D Scanning -->
+                    <div class="content-section">
+                        <h3>Part 0: Camera Calibration and 3D Scanning</h3>
+                        <div class="section-description">
+                            <p>In this part, I took images that I will use later to calibrate my camera and generate a NeRF. Calibrating camera intrinsics is required to generate the ray data that the training will use. Here, you can see camera frustums visualization showing the calibrated camera positions and orientations.</p>
+                        </div>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj4/viser_cloud1.jpg" alt="Camera Frustum Visualization 1" class="content-image clickable-image">
+                                <p class="content-caption">Camera Frustum Visualization 1</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj4/viser_cloud2.jpg" alt="Camera Frustum Visualization 2" class="content-image clickable-image">
+                                <p class="content-caption">Camera Frustum Visualization 2</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 1: Fit a Neural Field to a 2D Image -->
+                    <div class="content-section">
+                        <h3>Part 1: Fit a Neural Field to a 2D Image</h3>
+                        
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj4/neural_field/fox_rendered_L10_256.jpg" alt="Fox Image L10 256" class="content-image clickable-image">
+                                <p class="content-caption">Fox Image L10 256</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj4/neural_field/osulloc_rendered_L10_256.jpg" alt="Osulloc Image L10 256" class="content-image clickable-image">
+                                <p class="content-caption">Osulloc Image L10 256</p>
+                            </div>
+                        </div>
+                        
+                        <div class="section-description">
+                            <h4>Model Architecture Report</h4>
+                            <p><The model architecture I used wass a simple 3 layer MLP with 10 positional encoding layers and 256 parameters per layer. The positional encoding sends the original coordinates of the image through a set of sine and cosine waves to force frequency information into the starting data.
+                                <br><br>The learning rate I used was 0.01, the batch size was 10000, the number of iterations wass 2000. Here is the training progression shown in a graph of Peak-Signal-to-Noise-ratio along with the loss function over each iteration.
+                            </p>
+                        </div>
+                        <div style="width: 100%; margin-bottom: 2rem;">
+                            <img src="proj4/neural_field/fox_neural_field_results.png" alt="Fox Neural Field Results" class="content-image clickable-image" style="max-width: 100%; width: 100%; max-height: none;">
+                            <p class="content-caption">Fox Neural Field Results</p>
+                        </div>
+                        <div class="section-description">
+                            <h4>Training Progression Visualization</h4>
+                            <p>This is what training progression looks like for 1000 iterations of neural field passes.</p>
+                        </div>
+                        <div style="width: 100%; margin-bottom: 2rem;">
+                            <img src="proj4/neural_field/fox_intermediate_images.png" alt="Fox Intermediate Images" class="content-image clickable-image" style="max-width: 100%; width: 100%; max-height: none;">
+                            <p class="content-caption">Fox Intermediate Images</p>
+                        </div>
+                        <table class="fox-variations-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Width = 4</th>
+                                    <th>Width = 64</th>
+                                    <th>Width = 256</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>L = 2</th>
+                                    <td>
+                                        <img src="proj4/neural_field/fox_rendered_L2_4.jpg" alt="L=2, Width=4" class="table-image clickable-image">
+                                    </td>
+                                    <td>
+                                        <img src="proj4/neural_field/fox_rendered_L2_64.jpg" alt="L=2, Width=64" class="table-image clickable-image">
+                                    </td>
+                                    <td>
+                                        <img src="proj4/neural_field/fox_rendered_L2_256.jpg" alt="L=2, Width=256" class="table-image clickable-image">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>L = 10</th>
+                                    <td>
+                                        <img src="proj4/neural_field/fox_rendered_L10_4.jpg" alt="L=10, Width=4" class="table-image clickable-image">
+                                    </td>
+                                    <td>
+                                        <img src="proj4/neural_field/fox_rendered_L10_64.jpg" alt="L=10, Width=64" class="table-image clickable-image">
+                                    </td>
+                                    <td>
+                                        <img src="proj4/neural_field/fox_rendered_L10_256.jpg" alt="L=10, Width=256" class="table-image clickable-image">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>L = 100</th>
+                                    <td>
+                                        <img src="proj4/neural_field/fox_rendered_L100_4.jpg" alt="L=100, Width=4" class="table-image clickable-image">
+                                    </td>
+                                    <td>
+                                        <img src="proj4/neural_field/fox_rendered_L100_64.jpg" alt="L=100, Width=64" class="table-image clickable-image">
+                                    </td>
+                                    <td>
+                                        <img src="proj4/neural_field/fox_rendered_L100_256.jpg" alt="L=100, Width=256" class="table-image clickable-image">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="section-description">
+                            <h4>Final Results: Positional Encoding Frequency and Width Variations</h4>
+                            <p>Here you can see a visual representation of how the width and positional encoding of of the network affects the images. If not enough frequency information is given, the image loses sharpness and is blurry. Conversely, it gets a bit too sharp when the positional encoding is blown up.
+                                <br><br>The width is the number of parameters in each layer of the network. When this variable is too small, the network cant store the full information of the image and fails to capture color details especially. When this is too large, the image actually is great, but there is risk of overfitting with more difficult tasks and training will take much longer.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Part 2: Fit a Neural Radiance Field from Multi-view Images -->
+                    <div class="content-section">
+                        <h3>Part 2: Fit a Neural Radiance Field from Multi-view Images</h3>
+                        
+                        <div class="section-description">
+                            <h4>Implementation</h4>
+                            <p>Now, I will be moving on towards a 3d representation and Neural Radiance Field. In order to do this, we now need to consider the depth, position, and viewing angle of each point.</p>
+                        </div>
+                        <div class="section-description">
+                            <p><strong>Ray Sampling</strong></p>
+                            <p>For each pixel in an image, we can build a ray that passes through the camera center. This ray is how we will represent all of the data in our scene. To obtain these rays, we can use the extrinsic and intrinsic camera matrices we generated from before to construct each ray. Simply put, these matrices map the pixel coordinates to the 3d world coordinates. With the camera orientation also contained in the extrinsic matrix, we can construct a ray in space.</p>
+                        </div>
+                        <div class="section-description">
+                            <p><strong>Ray Sampling:</strong></p>
+                            <p>For sampling, I plot uniform points across my rays, treat the space in between as bins, and plot points randomly within each bin.</p>
+                        </div>
+                        
+                        <div class="section-description">
+                            <p><strong>Ray Rendering:</strong></p>
+                            <p>This is a visualization of what my ray sampling would look like. Here I show a single ray coming out of each camera frustum and a bundle of rays coming out of one frustum to make this more easily visible. The model is fed random bundles from each frustum.</p>
+                        </div>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="proj4/lego_set/cloud_ray_viser.jpg" alt="Cloud Ray Visualization" class="content-image clickable-image">
+                                <p class="content-caption">Cloud Ray Visualization</p>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="proj4/lego_set/cloud_ray_bundle_viser.jpg" alt="Cloud Ray Bundle Visualization" class="content-image clickable-image">
+                                <p class="content-caption">Cloud Ray Bundle Visualization</p>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <p><strong>Model Architecture:</strong></p>
+                            <p>The model I'm using has the standard architecture to the tee, here is a visual representation of the layers.</p>
+                        </div>
+                        <div style="width: 100%; margin-bottom: 2rem;">
+                            <img src="proj4/mlp_nerf.png" alt="MLP NeRF Architecture" class="content-image clickable-image" style="max-width: 100%; width: 100%; max-height: none;">
+                            <p class="content-caption">MLP NeRF Architecture</p>
+                        </div>
+                        <div class="section-description">
+                            <p><strong>Model Feedback and Volume Rendering:</strong></p>
+                            <p>Them magic to this is the volume rendering equation. The equation is a model of how a point in space will look when viewed from a given angle. This varies on opacity. A similar idea to this is the density represented by the sigma value. After discretely adding up all of the points along a ray, we can guage the difference between the true color and the color predicted by the model.</p>
+                        </div>
+                        <div class="math-equation">
+                            <p>\[\hat{C}(\mathbf{r}) = \sum_{i=1}^{N} T_i \left( 1 - \exp(-\sigma_i \delta_i) \right) c_i, \quad \text{where} \quad T_i = \exp\left( -\sum_{j=1}^{i-1} \sigma_j \delta_j \right)\]</p>
+                        </div>
+                        <div class="section-description">
+                            <p><strong>Other Implementation Details:</strong></p>
+                            <p></p>
+                        </div>
+
+                    </div>
+
+                    <!-- Lego Set Section -->
+                    <div class="content-section">
+                        <h3>Lego Set</h3>
+                        
+                        <div class="section-description">
+                            <p></p>
+                        </div>
+                        
+                        <div style="width: 100%; margin-bottom: 2rem;">
+                            <video controls class="full-width-video" preload="metadata">
+                                <source src="proj4/lego_set_video.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <p class="content-caption">Lego Set Video</p>
+                        </div>
+                        
+                        <div style="width: 100%; margin-bottom: 2rem;">
+                            <img src="proj4/lego_set/graphs.jpg" alt="Lego Set Graphs" class="content-image clickable-image" style="max-width: 100%; width: 100%; max-height: none;">
+                            <p class="content-caption">Lego Set Graphs</p>
+                        </div>
+                    </div>
+
+                    <!-- Lafufu and Pikachu Section -->
+                    <div class="content-section">
+                        <h3>Lafufu and Pikachu</h3>
+                        
+                        <div style="width: 100%; margin-bottom: 2rem;">
+                            <video controls class="full-width-video" preload="metadata">
+                                <source src="proj4/lafufu_set_video.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <p class="content-caption">Lafufu Video</p>
+                        </div>
+                        
+                        <div class="section-description">
+                            <p></p>
+                        </div>
+                        
+                        <div style="width: 100%; margin-bottom: 2rem;">
+                            <img src="proj4/lafufu_attempt.jpg" alt="Lafufu Attempt" class="content-image clickable-image" style="max-width: 100%; width: 100%; max-height: none;">
+                            <p class="content-caption">Lafufu Attempt</p>
+                        </div>
+                        
+                        <div style="width: 100%; margin-bottom: 2rem;">
+                            <video controls class="full-width-video" preload="metadata">
+                                <source src="proj4/pikachu_set_video.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <p class="content-caption">Pikachu Video</p>
+                        </div>
+                        
+                        <div class="section-description">
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+    </div>
+
+    <script src="./script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
+

@@ -494,6 +494,63 @@ body {
     margin-right: auto;
 }
 
+.fox-variations-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.fox-variations-table thead {
+    background-color: #2a2a2a;
+}
+
+.fox-variations-table th {
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    color: #9ed072;
+    border: 1px solid #333;
+    font-size: 1rem;
+}
+
+.fox-variations-table tbody th {
+    background-color: #2a2a2a;
+    vertical-align: middle;
+}
+
+.fox-variations-table td {
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid #333;
+    vertical-align: middle;
+}
+
+.table-image {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+    border: 2px solid #9ed072;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+}
+
+.full-width-video {
+    width: 100%;
+    max-width: 100%;
+    min-height: 600px;
+    height: auto;
+    display: block;
+    border: 2px solid #9ed072;
+    border-radius: 15px;
+    background-color: #000;
+}
+
 .content-caption {
     color: #e7c664;
     font-size: 1rem;
@@ -980,5 +1037,9 @@ body {
     
     .math-equation p {
         font-size: 1rem;
+    }
+    
+    .full-width-video {
+        height: 400px;
     }
 }
