@@ -207,10 +207,7 @@
                         <div class="math-equation">
                             <p>\[\hat{C}(\mathbf{r}) = \sum_{i=1}^{N} T_i \left( 1 - \exp(-\sigma_i \delta_i) \right) c_i, \quad \text{where} \quad T_i = \exp\left( -\sum_{j=1}^{i-1} \sigma_j \delta_j \right)\]</p>
                         </div>
-                        <div class="section-description">
-                            <p><strong>Other Implementation Details:</strong></p>
-                            <p></p>
-                        </div>
+
 
                     </div>
 
@@ -219,12 +216,12 @@
                         <h3>Lego Set</h3>
                         
                         <div class="section-description">
-                            <p></p>
+                            <p>The lego set is a set of images that can be seen with the dome visualization in the previous parts. There were many camera frames and they were all provided undistorted by lens effects, calibrated distance from the subject, intrinsics and extrinsics provided. With this set, we are able to get a fairly clean view of the lego set with minimal training. The only modifications I made were to add a gamma learning rate decay of .3. Besides this, it took 5000 iterations on batch size 10000 to reach 23+ PSNR.</p>
                         </div>
                         
                         <div style="width: 100%; margin-bottom: 2rem;">
-                            <video controls class="full-width-video" preload="metadata">
-                                <source src="proj4/lego_set_video.mp4" type="video/mp4">
+                            <video class="full-width-video" controls preload="auto" playsinline>
+                                <source src="proj4/lego_set_video-converted.mp4" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                             <p class="content-caption">Lego Set Video</p>
@@ -241,15 +238,17 @@
                         <h3>Lafufu and Pikachu</h3>
                         
                         <div style="width: 100%; margin-bottom: 2rem;">
-                            <video controls class="full-width-video" preload="metadata">
-                                <source src="proj4/lafufu_set_video.mp4" type="video/mp4">
+                            <video class="full-width-video" controls preload="auto" playsinline>
+                                <source src="proj4/lafufu_set_video-converted.mp4" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                             <p class="content-caption">Lafufu Video</p>
                         </div>
                         
                         <div class="section-description">
-                            <p></p>
+                            <p>The lafufu was a staff built data set with intrinsics pre-calculated. with this set I was able to achieve about 19 PSNR with 5000 iterations. I tweaked the learning rate to .3 decay and most importantly, the near and far I used were completely different. I used a near of .1 and a far of 1.0. This allows my rays to be set in a much tighter space and scan the subject only over and over rather than going through space.
+                                <br><br>In order to do this, it was important to set the origin. For my code I set the origin to be the corner of the Aruco tag closest to the lafufu's feet. This placed the origin of the scene very close to the subject so the rays could be limited in size. I tried larger parameters and the results were just worse. My final scene generation used a batch size of 20000, 64 samples per ray, and 5000 iterations.
+                            </p>
                         </div>
                         
                         <div style="width: 100%; margin-bottom: 2rem;">
@@ -258,15 +257,22 @@
                         </div>
                         
                         <div style="width: 100%; margin-bottom: 2rem;">
-                            <video controls class="full-width-video" preload="metadata">
-                                <source src="proj4/pikachu_set_video.mp4" type="video/mp4">
+                            <video class="full-width-video" controls preload="auto" playsinline>
+                                <source src="proj4/pikachu_set_video-converted.mp4" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                             <p class="content-caption">Pikachu Video</p>
                         </div>
                         
+                        <div style="width: 100%; margin-bottom: 2rem;">
+                            <img src="proj4/pika_progress.jpg" alt="Pika Progress" class="content-image clickable-image" style="max-width: 100%; width: 100%; max-height: none;">
+                            <p class="content-caption">Pika Progress</p>
+                        </div>
+                        
                         <div class="section-description">
-                            <p></p>
+                            <p>Above is my attempt at creating a nerf. I think that one of the biggest things that I struggled with was the lens of my camera. The images were quite distorted and the best estimation for my origin came from setting the size of the aruco tag in the scene to be larger than it actually was due to this.
+                                <br><br>Due to this, I was getting capped at closer to 15 PSNR with 1 hour of training. The scene was calibrated to be very short, similar to the lafufu and I set near and far to 0.2 and 1.5 respectively. I trained 3000 iterations in this video with a batch of 15000 and 64 samples. I think one of the best ways to improve this would be to use a better image set with more aruco tags. Additionally, due to the placement of the single aruco tag, the back of pikachu is pretty much never trained.
+                            </p>
                         </div>
                     </div>
                 </div>
