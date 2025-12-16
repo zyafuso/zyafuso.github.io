@@ -181,7 +181,7 @@
                     <div class="content-section">
                         <h3>1.3 One-Step Denoising (Pretrained UNet)</h3>
                         <div class="section-description">
-                            <p>[placeholder text]</p>
+                            <p>Here, I used a pretrained Unet to denoise the image. This Unet can be used to recover Gaussian noise from an image. As you can see in the images, it does a much better job at denoising but the struggles for more difficult jobs and more noise. Part of this is because the Unet is designed to predict noise, but not all at once. In the next part we will how it performs when breaking up the denoising process into multiple iterative steps.</p>
                         </div>
                         <div class="gallery-grid grid-3">
                             <div class="grid-item">
@@ -216,7 +216,9 @@
                     <div class="content-section">
                         <h3>1.4 Iterative Denoising (Strided Timesteps)</h3>
                         <div class="section-description">
-                            <p>[placeholder text]</p>
+                            <p>When adding noise to the campanile image, there are actually 1000 timesteps t. So using our previous denoiser, we could run the Unet through 1000 steps of denoising. However, this would be slow and expensive, so instead we will take strided timesteps using the principle that noise can be represented as a continuous time function and therefore differentiated. In the images below, I take about ~30 total steps through the image space. The Unet can be thought of as iteratively stepping, or walking, the noise towards the real image manifold.
+                                <br><br>The stage 2 images were enhanced for a better view of each of the various methods explored in the previous parts next to the final result of our iterative denoising.
+                            </p>
                         </div>
                         <div class="gallery-grid grid-3">
                             <div class="grid-item">
@@ -265,7 +267,9 @@
                     <div class="content-section">
                         <h3>1.5 Diffusion Model Sampling</h3>
                         <div class="section-description">
-                            <p>[placeholder text]</p>
+                            <p>At this point, we have created our diffusion model. To generate novel images like the ones above, we simply input random noise, set our start timestep to 0, and denoise with a prompt que. The results above are all created with the prompt "a high quality photo". The images have also been upsampled like before for visual pleasure.
+                                <br><br>The images aren't quite "high quality" though. Many of them seem to have contextual mishaps and various artifacts.
+                            </p>
                         </div>
                         <div class="gallery-grid grid-3">
                             <div class="grid-item">
@@ -296,7 +300,9 @@
                     <div class="content-section">
                         <h3>1.6 Classifier-Free Guidance Sampling</h3>
                         <div class="section-description">
-                            <p>[placeholder text]</p>
+                            <p>In this step, we will use a strong diffusion model optimization that splits the model attention and training into two parts. One part focuses on answering the question of, “If I ignore the prompt, what clean image would explain this noisy image?” The other part focuses on explaining the noisy image with the prompt. With the expense of image diversity, we greatly improve overall image quality.
+                                <br><br> For the above 5 images, I took a random set of 5 that were generated. They happened to contain mostly people, so I included them but many images also contained animals, structures, landscapes, etc.
+                            </p>
                         </div>
                         <div class="gallery-grid grid-3">
                             <div class="grid-item">
@@ -324,12 +330,9 @@
                         </div>
                     </div>
 
-                    <div class="content-section">
+                    <div class="content-section part-17">
                         <h3>1.7 Image-to-image Translation</h3>
-                        <div class="section-description">
-                            <p>[placeholder text]</p>
-                        </div>
-                        <h4>Campanile edits (noise levels 1, 3, 5, 7, 10, 20)</h4>
+                        <h4>Noise-To-Image Noise Ratio Steps</h4>
                         <div class="gallery-grid grid-6">
                             <div class="grid-item">
                                 <img src="proj5/1.7/camp_renoise_lvl_1.png" alt="Campanile renoise lvl 1" class="content-image square-img clickable-image">
@@ -356,8 +359,6 @@
                                 <p class="content-caption">Campanile t=20</p>
                             </div>
                         </div>
-
-                        <h4>Own images (duck, steve)</h4>
                         <div class="gallery-grid grid-6">
                             <div class="grid-item">
                                 <img src="proj5/1.7/duck_renoise_lvl_1.png" alt="Duck renoise lvl 1" class="content-image square-img clickable-image">
@@ -409,15 +410,17 @@
                                 <img src="proj5/1.7/steve_renoise_lvl_20.png" alt="Steve renoise lvl 20" class="content-image square-img clickable-image">
                                 <p class="content-caption">Steve t=20</p>
                             </div>
+                           
+                        </div>
+                        <div class="section-description">
+                            <p>In these images, I am starting with a real image, adding noise, and denoising. Each noise step represents how much noise I add to the image before reversing the process and denoising again. For an image with lvl 1, I add noise until 1 timestep before the image becomes completely random, and denoise. This generates images that may have similarities to the original, but fall elsewhere on the real image manifold. </p>
                         </div>
                     </div>
 
-                    <div class="content-section">
+                    <div class="content-section part-17">
                         <h3>1.7.1 Editing Hand-Drawn and Web Images</h3>
-                        <div class="section-description">
-                            <p>[placeholder text]</p>
-                        </div>
-                        <h4>Web image (flamingo)</h4>
+
+                        <h4>Noise-To-Image 2</h4>
                         <div class="gallery-grid grid-6">
                             <div class="grid-item">
                                 <img src="proj5/1.7/flamingo_renoise_lvl_1.png" alt="Flamingo renoise lvl 1" class="content-image square-img clickable-image">
@@ -431,8 +434,6 @@
                                 <img src="proj5/1.7/flamingo_renoise_lvl_5.png" alt="Flamingo renoise lvl 5" class="content-image square-img clickable-image">
                                 <p class="content-caption">Flamingo t=5</p>
                             </div>
-                        </div>
-                        <div class="gallery-grid grid-3">
                             <div class="grid-item">
                                 <img src="proj5/1.7/flamingo_renoise_lvl_7.png" alt="Flamingo renoise lvl 7" class="content-image square-img clickable-image">
                                 <p class="content-caption">Flamingo t=7</p>
@@ -446,8 +447,6 @@
                                 <p class="content-caption">Flamingo t=20</p>
                             </div>
                         </div>
-
-                        <h4>Hand-drawn images (cat, forest)</h4>
                         <div class="gallery-grid grid-6">
                             <div class="grid-item">
                                 <img src="proj5/1.7/cat_renoise_lvl_1.png" alt="Cat renoise lvl 1" class="content-image square-img clickable-image">
@@ -499,28 +498,60 @@
                                 <img src="proj5/1.7/forest_renoise_lvl_20.png" alt="Forest renoise lvl 20" class="content-image square-img clickable-image">
                                 <p class="content-caption">Forest t=20</p>
                             </div>
+                            
+                                                        
+                            
                         </div>
-                    </div>
-
-                    <div class="content-section">
-                        <h3>1.7.2 Inpainting</h3>
                         <div class="section-description">
-                            <p>[placeholder text]</p>
+                            <p>These images are more examples of the same thing. Below are the original images I started with for the forest and cat noising process. Something interesting to me in this process was that the forst image probably turned out the closest to what I pictured when drawing at about t=5. It proceeded to "overfit" to the drawing and lose the realism when getting closer to the actual image.</p>
                         </div>
-                        <div class="gallery-grid grid-3">
+                        <div class="gallery-grid center-two">
                             <div class="grid-item">
-                                <img src="proj5/1.7/camp_inpainting.png" alt="Campanile inpainting" class="content-image square-img clickable-image">
-                                <p class="content-caption">Campanile inpaint</p>
+                                <img src="proj5/1.7/cat.png" alt="Original cat" class="content-image square-img clickable-image">
+                                <p class="content-caption">Original cat</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/forest.png" alt="Original forest" class="content-image square-img clickable-image">
+                                <p class="content-caption">Original forest</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="content-section">
+                    <div class="content-section part-17">
+                        <h3>1.7.2 Inpainting</h3>
+                        
+                        <div class="gallery-grid grid-4">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.2/camp.png" alt="Campanile original" class="content-image square-img clickable-image">
+                                <p class="content-caption">Original</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.2/mask.png" alt="Campanile mask" class="content-image square-img clickable-image">
+                                <p class="content-caption">Mask</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.2/hole_to_fill.png" alt="Campanile hole to fill" class="content-image square-img clickable-image">
+                                <p class="content-caption">Hole to fill</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.2/camp_inpainting.png" alt="Campanile inpainting result" class="content-image square-img clickable-image">
+                                <p class="content-caption">Inpainted result</p>
+                            </div>
+                        </div>
+                        <div class="section-description">
+                            <p>This is an example of inpainting. After applying a mask to the image, simply apply the diffusion process to the hole.</p>
+                        </div>
+                    </div>
+
+                    <div class="content-section part-17">
                         <h3>1.7.3 Text-Conditional Image-to-image Translation</h3>
                         <div class="section-description">
-                            <p>[placeholder text]</p>
+                            <p>This process is the exact same as the noise-to-image process, but with a text prompt. I used the same images as the noise-to-image process and applied the text prompt to the images.</p>
                         </div>
-                        <h4>Campanile</h4>
+                        <div class="set-title-row">
+                            <span>'a photo of a man'</span>
+                            <span>campanile.png</span>
+                        </div>
                         <div class="gallery-grid grid-6">
                             <div class="grid-item">
                                 <img src="proj5/1.7/1.7.3/man_camp_translation_1.png" alt="Campanile translation t=1" class="content-image square-img clickable-image">
@@ -548,7 +579,10 @@
                             </div>
                         </div>
 
-                        <h4>Dog & Bird</h4>
+                        <div class="set-title-row">
+                            <span>'a photo of a dog'</span>
+                            <span>duck.png</span>
+                        </div>
                         <div class="gallery-grid grid-6">
                             <div class="grid-item">
                                 <img src="proj5/1.7/1.7.3/dog_bird_translation_1.png" alt="Dog bird translation t=1" class="content-image square-img clickable-image">
@@ -576,7 +610,10 @@
                             </div>
                         </div>
 
-                        <h4>Baljeet</h4>
+                        <div class="set-title-row">
+                            <span>'the letter z'</span>
+                            <span>baljeet.png</span>
+                        </div>
                         <div class="gallery-grid grid-6">
                             <div class="grid-item">
                                 <img src="proj5/1.7/1.7.3/z_baljeet_translation_1.png" alt="Baljeet translation t=1" class="content-image square-img clickable-image">
@@ -610,14 +647,20 @@
                         <div class="section-description">
                             <p>[placeholder text]</p>
                         </div>
-                        <div class="gallery-grid grid-3">
+                        <div class="gallery-grid grid-3 center-two">
                             <div class="grid-item">
-                                <img src="proj5/1.8/elephant_city_abstract_art.png" alt="Visual anagram elephant city abstract" class="content-image square-img clickable-image">
-                                <p class="content-caption">Visual anagram 1</p>
+                                <img src="proj5/1.8/elephant_city_abstract_art_enhanced.png" alt="Visual anagram elephant city abstract" class="content-image square-img clickable-image visual-anagram">
+                                <p class="content-caption dual-caption">
+                                    <span class="primary-caption">Visual anagram 1</span>
+                                    <span class="hover-caption">Flip to reveal</span>
+                                </p>
                             </div>
                             <div class="grid-item">
-                                <img src="proj5/1.8/monkey_typewriter_mouse_tophat.png" alt="Visual anagram monkey typewriter mouse tophat" class="content-image square-img clickable-image">
-                                <p class="content-caption">Visual anagram 2</p>
+                                <img src="proj5/1.8/monkey_typewriter_mouse_tophat_enhanced.png" alt="Visual anagram monkey typewriter mouse tophat" class="content-image square-img clickable-image visual-anagram">
+                                <p class="content-caption dual-caption">
+                                    <span class="primary-caption">Visual anagram 2</span>
+                                    <span class="hover-caption">Flip to reveal</span>
+                                </p>
                             </div>
                         </div>
                     </div>
