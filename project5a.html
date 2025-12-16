@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 5A - CS180 Website</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">zyafuso.github.io</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="project5a.html" class="nav-link active">Project 5A</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">Project 5A</h1>
+            </div>
+        </section>
+
+        <section class="project-content">
+            <div class="container">
+                <div class="project-container">
+                    <div class="project-intro">
+                        <h2>Part 0 — Diffusion Model Experiments</h2>
+                        <p>Goal: experiment with a diffusion model, generate images from text prompts, and compare different sampling lengths. Captions and reflections are left as placeholders for you to fill in.</p>
+                        <p><strong>Random seed (used for all parts):</strong> [placeholder text]</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>Prompt 1: "A cat with a big fish"</h3>
+                        <div class="section-description">
+                            <p>These are some examples of what diffusion models can generate. One of the important parameters that can be set on a diffusion model is the number of inference steps. Number of inference steps determines the quality of an image, but also increases the time to process.</p>
+                        </div>
+                        <div class="gallery-grid grid-4">
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/a%20cat%20with%20a%20big%20fish_10.png" alt="A cat with a big fish, 10/10 steps" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 10, Stage 2: 10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/A%20cat%20with%20a%20%20big%20fish_20.png" alt="A cat with a big fish, 20/20 steps" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 20, Stage 2: 20</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/a%20cat%20with%20a%20big%20fish_200.png" alt="A cat with a big fish, 200/200 steps" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 200, Stage 2: 200</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/a%20cat%20with%20a%20big%20fish_200_20.png" alt="A cat with a big fish, 200/20 steps" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 200, Stage 2: 20</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>Prompt 2: "One piece"</h3>
+                        <div class="section-description">
+                            <p>The different stages that are noted in the captions represent two different diffusion models. Stage 1 creates a 64x64 image based solely on a prompt. Stage 2 upsamples the image to a larger size.</p>
+                        </div>
+                        <div class="gallery-grid grid-4">
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/one%20piece_10.png" alt="One piece, 10/10 steps" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 10, Stage 2: 10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/one%20piece_20.png" alt="One piece, 20/20 steps" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 20, Stage 2: 20</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/one%20piece_200.png" alt="One piece, 200/200 steps" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 200, Stage 2: 200</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/one%20piece_200_200.png" alt="One piece, 200/200 alt run" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 200, Stage 2: 200</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>Prompt 3: "alien creature"</h3>
+                        <div class="section-description">
+                            <p>The differences are honestly hard to see. The most noticeable change is that when the inference steps are decreased to 10, the model doesn't seem to have enough time to fully finish parts of the image. Low detail will make it but any high detail areas will suffer. Similarly, high detail components are almost given too much time and show up bad and overdone.</p>
+                        </div>
+                        <div class="gallery-grid grid-4">
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/alien%20creature_10.png" alt="Alien creature, 10/10 steps" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 10, Stage 2: 10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/alien%20creature_20.png" alt="Alien creature, 20/20 steps" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 20, Stage 2: 20</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/alien%20creature_200.png" alt="Alien creature, 200/200 steps" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 200, Stage 2: 200</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/0%20-%20Sampling/alien%20creature_200_20.png" alt="Alien creature, 200/20 steps" class="content-image clickable-image">
+                                <p class="content-caption">Stage 1: 200, Stage 2: 20</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.1 Implementing the Forward Process</h3>
+                        <div class="section-description">
+                            <p>Now that we understand what type of content diffusion models can generate, its time to implement our own. The first step is to look at the forward process of a diffusion model. This is just simply adding noise to an image until it becomes completely random.</p>
+                        </div>
+                        <div class="gallery-grid grid-4">
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/campanile.jpg" alt="Campanile original" class="content-image square-img clickable-image">
+                                <p class="content-caption">Original Campanile</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_noisy_250.png" alt="Campanile noisy level 250" class="content-image square-img clickable-image">
+                                <p class="content-caption">Campanile — noise level 250</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_noisy_500.png" alt="Campanile noisy level 500" class="content-image square-img clickable-image">
+                                <p class="content-caption">Campanile — noise level 500</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_noisy_750.png" alt="Campanile noisy level 750" class="content-image square-img clickable-image">
+                                <p class="content-caption">Campanile — noise level 750</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.2 Classical Denoising (Gaussian Blur)</h3>
+                        <div class="section-description">
+                            <p>With previous techniques, we were unable to remove noise from images. A gaussian blur is used to remove noise from images but it is ultimately a convolution that can't generate new information. When an image gets too noisy, the gaussian denoise becomes almost useless immediately.</p>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_noisy_250.png" alt="Campanile noisy level 250" class="content-image square-img clickable-image">
+                                <p class="content-caption">Noisy — t=250</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_noisy_500.png" alt="Campanile noisy level 500" class="content-image square-img clickable-image">
+                                <p class="content-caption">Noisy — t=500</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_noisy_750.png" alt="Campanile noisy level 750" class="content-image square-img clickable-image">
+                                <p class="content-caption">Noisy — t=750</p>
+                            </div>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_guass_denoise_250.png" alt="Gaussian blur denoise level 250" class="content-image square-img clickable-image">
+                                <p class="content-caption">Gaussian blur — t=250</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_guass_denoise_500.png" alt="Gaussian blur denoise level 500" class="content-image square-img clickable-image">
+                                <p class="content-caption">Gaussian blur — t=500</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_guass_denoise_750.png" alt="Gaussian blur denoise level 750" class="content-image square-img clickable-image">
+                                <p class="content-caption">Gaussian blur — t=750</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.3 One-Step Denoising (Pretrained UNet)</h3>
+                        <div class="section-description">
+                            <p>[placeholder text]</p>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_noisy_250.png" alt="Campanile noisy t=250" class="content-image square-img clickable-image">
+                                <p class="content-caption">Noisy — t=250</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_noisy_500.png" alt="Campanile noisy t=500" class="content-image square-img clickable-image">
+                                <p class="content-caption">Noisy — t=500</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.2/camp_noisy_750.png" alt="Campanile noisy t=750" class="content-image square-img clickable-image">
+                                <p class="content-caption">Noisy — t=750</p>
+                            </div>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.3/camp_pred_denoise_250.png" alt="Campanile UNet estimate t=250" class="content-image square-img clickable-image">
+                                <p class="content-caption">UNet estimate — t=250</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.3/camp_pred_denoise_500.png" alt="Campanile UNet estimate t=500" class="content-image square-img clickable-image">
+                                <p class="content-caption">UNet estimate — t=500</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.3/camp_pred_denoise_750.png" alt="Campanile UNet estimate t=750" class="content-image square-img clickable-image">
+                                <p class="content-caption">UNet estimate — t=750</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.4 Iterative Denoising (Strided Timesteps)</h3>
+                        <div class="section-description">
+                            <p>[placeholder text]</p>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.4/Iterative_denoise_690.png" alt="Iterative denoise start (timestep ~690)" class="content-image square-img clickable-image">
+                                <p class="content-caption">Start (stride idx 0)</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.4/Iter_dn_540.png" alt="Iterative denoise mid step t≈540" class="content-image square-img clickable-image">
+                                <p class="content-caption">After 5 steps</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.4/Iter_dn_390.png" alt="Iterative denoise mid step t≈390" class="content-image square-img clickable-image">
+                                <p class="content-caption">After 10 steps</p>
+                            </div>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.4/Iter_dn_240.png" alt="Iterative denoise mid step t≈240" class="content-image square-img clickable-image">
+                                <p class="content-caption">After 15 steps</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.4/Iter_dn_90.png" alt="Iterative denoise mid step t≈90" class="content-image square-img clickable-image">
+                                <p class="content-caption">After 20 steps</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.4/Iter_dn_0_final.png" alt="Iterative denoise final" class="content-image square-img clickable-image">
+                                <p class="content-caption">Final iterative</p>
+                            </div>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.4/stage_2_iter.png" alt="Iterative denoise stage 2" class="content-image square-img clickable-image">
+                                <p class="content-caption">Iterative stage 2</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.4/stage_2_one_step.png" alt="One-step denoise stage 2" class="content-image square-img clickable-image">
+                                <p class="content-caption">Single-step stage 2</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/Campanile%20Guassian%20denoise/1.4/stage_2_gauss_blur.png" alt="Gaussian blur stage 2" class="content-image square-img clickable-image">
+                                <p class="content-caption">Gaussian blur stage 2</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.5 Diffusion Model Sampling</h3>
+                        <div class="section-description">
+                            <p>[placeholder text]</p>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/1.5/random_gen_1.png" alt="Random diffusion sample 1" class="content-image square-img clickable-image">
+                                <p class="content-caption">Sample 1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.5/random_gen_2.png" alt="Random diffusion sample 2" class="content-image square-img clickable-image">
+                                <p class="content-caption">Sample 2</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.5/random_gen_3.png" alt="Random diffusion sample 3" class="content-image square-img clickable-image">
+                                <p class="content-caption">Sample 3</p>
+                            </div>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/1.5/random_gen_4.png" alt="Random diffusion sample 4" class="content-image square-img clickable-image">
+                                <p class="content-caption">Sample 4</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.5/random_gen_5.png" alt="Random diffusion sample 5" class="content-image square-img clickable-image">
+                                <p class="content-caption">Sample 5</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.6 Classifier-Free Guidance Sampling</h3>
+                        <div class="section-description">
+                            <p>[placeholder text]</p>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/1.6/cfg_1.png" alt="CFG sample 1" class="content-image square-img clickable-image">
+                                <p class="content-caption">CFG sample 1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.6/cfg_2.png" alt="CFG sample 2" class="content-image square-img clickable-image">
+                                <p class="content-caption">CFG sample 2</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.6/cfg_3.png" alt="CFG sample 3" class="content-image square-img clickable-image">
+                                <p class="content-caption">CFG sample 3</p>
+                            </div>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/1.6/cfg_4.png" alt="CFG sample 4" class="content-image square-img clickable-image">
+                                <p class="content-caption">CFG sample 4</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.6/cfg_5.png" alt="CFG sample 5" class="content-image square-img clickable-image">
+                                <p class="content-caption">CFG sample 5</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.7 Image-to-image Translation</h3>
+                        <div class="section-description">
+                            <p>[placeholder text]</p>
+                        </div>
+                        <h4>Campanile edits (noise levels 1, 3, 5, 7, 10, 20)</h4>
+                        <div class="gallery-grid grid-6">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/camp_renoise_lvl_1.png" alt="Campanile renoise lvl 1" class="content-image square-img clickable-image">
+                                <p class="content-caption">Campanile t=1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/camp_renoise_lvl_3.png" alt="Campanile renoise lvl 3" class="content-image square-img clickable-image">
+                                <p class="content-caption">Campanile t=3</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/camp_renoise_lvl_5.png" alt="Campanile renoise lvl 5" class="content-image square-img clickable-image">
+                                <p class="content-caption">Campanile t=5</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/camp_renoise_lvl_7.png" alt="Campanile renoise lvl 7" class="content-image square-img clickable-image">
+                                <p class="content-caption">Campanile t=7</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/camp_renoise_lvl_10.png" alt="Campanile renoise lvl 10" class="content-image square-img clickable-image">
+                                <p class="content-caption">Campanile t=10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/camp_renoise_lvl_20.png" alt="Campanile renoise lvl 20" class="content-image square-img clickable-image">
+                                <p class="content-caption">Campanile t=20</p>
+                            </div>
+                        </div>
+
+                        <h4>Own images (duck, steve)</h4>
+                        <div class="gallery-grid grid-6">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/duck_renoise_lvl_1.png" alt="Duck renoise lvl 1" class="content-image square-img clickable-image">
+                                <p class="content-caption">Duck t=1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/duck_renoise_lvl_3.png" alt="Duck renoise lvl 3" class="content-image square-img clickable-image">
+                                <p class="content-caption">Duck t=3</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/duck_renoise_lvl_5.png" alt="Duck renoise lvl 5" class="content-image square-img clickable-image">
+                                <p class="content-caption">Duck t=5</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/duck_renoise_lvl_7.png" alt="Duck renoise lvl 7" class="content-image square-img clickable-image">
+                                <p class="content-caption">Duck t=7</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/duck_renoise_lvl_10.png" alt="Duck renoise lvl 10" class="content-image square-img clickable-image">
+                                <p class="content-caption">Duck t=10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/duck_renoise_lvl_20.png" alt="Duck renoise lvl 20" class="content-image square-img clickable-image">
+                                <p class="content-caption">Duck t=20</p>
+                            </div>
+                        </div>
+                        <div class="gallery-grid grid-6">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/steve_renoise_lvl_1.png" alt="Steve renoise lvl 1" class="content-image square-img clickable-image">
+                                <p class="content-caption">Steve t=1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/steve_renoise_lvl_3.png" alt="Steve renoise lvl 3" class="content-image square-img clickable-image">
+                                <p class="content-caption">Steve t=3</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/steve_renoise_lvl_5.png" alt="Steve renoise lvl 5" class="content-image square-img clickable-image">
+                                <p class="content-caption">Steve t=5</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/steve_renoise_lvl_7.png" alt="Steve renoise lvl 7" class="content-image square-img clickable-image">
+                                <p class="content-caption">Steve t=7</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/steve_renoise_lvl_10.png" alt="Steve renoise lvl 10" class="content-image square-img clickable-image">
+                                <p class="content-caption">Steve t=10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/steve_renoise_lvl_20.png" alt="Steve renoise lvl 20" class="content-image square-img clickable-image">
+                                <p class="content-caption">Steve t=20</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.7.1 Editing Hand-Drawn and Web Images</h3>
+                        <div class="section-description">
+                            <p>[placeholder text]</p>
+                        </div>
+                        <h4>Web image (flamingo)</h4>
+                        <div class="gallery-grid grid-6">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/flamingo_renoise_lvl_1.png" alt="Flamingo renoise lvl 1" class="content-image square-img clickable-image">
+                                <p class="content-caption">Flamingo t=1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/flamingo_renoise_lvl_3.png" alt="Flamingo renoise lvl 3" class="content-image square-img clickable-image">
+                                <p class="content-caption">Flamingo t=3</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/flamingo_renoise_lvl_5.png" alt="Flamingo renoise lvl 5" class="content-image square-img clickable-image">
+                                <p class="content-caption">Flamingo t=5</p>
+                            </div>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/flamingo_renoise_lvl_7.png" alt="Flamingo renoise lvl 7" class="content-image square-img clickable-image">
+                                <p class="content-caption">Flamingo t=7</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/flamingo_renoise_lvl_10.png" alt="Flamingo renoise lvl 10" class="content-image square-img clickable-image">
+                                <p class="content-caption">Flamingo t=10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/flamingo_renoise_lvl_20.png" alt="Flamingo renoise lvl 20" class="content-image square-img clickable-image">
+                                <p class="content-caption">Flamingo t=20</p>
+                            </div>
+                        </div>
+
+                        <h4>Hand-drawn images (cat, forest)</h4>
+                        <div class="gallery-grid grid-6">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/cat_renoise_lvl_1.png" alt="Cat renoise lvl 1" class="content-image square-img clickable-image">
+                                <p class="content-caption">Cat t=1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/cat_renoise_lvl_3.png" alt="Cat renoise lvl 3" class="content-image square-img clickable-image">
+                                <p class="content-caption">Cat t=3</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/cat_renoise_lvl_5.png" alt="Cat renoise lvl 5" class="content-image square-img clickable-image">
+                                <p class="content-caption">Cat t=5</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/cat_renoise_lvl_7.png" alt="Cat renoise lvl 7" class="content-image square-img clickable-image">
+                                <p class="content-caption">Cat t=7</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/cat_renoise_lvl_10.png" alt="Cat renoise lvl 10" class="content-image square-img clickable-image">
+                                <p class="content-caption">Cat t=10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/cat_renoise_lvl_20.png" alt="Cat renoise lvl 20" class="content-image square-img clickable-image">
+                                <p class="content-caption">Cat t=20</p>
+                            </div>
+                        </div>
+                        <div class="gallery-grid grid-6">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/forest_renoise_lvl_1.png" alt="Forest renoise lvl 1" class="content-image square-img clickable-image">
+                                <p class="content-caption">Forest t=1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/forest_renoise_lvl_3.png" alt="Forest renoise lvl 3" class="content-image square-img clickable-image">
+                                <p class="content-caption">Forest t=3</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/forest_renoise_lvl_5.png" alt="Forest renoise lvl 5" class="content-image square-img clickable-image">
+                                <p class="content-caption">Forest t=5</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/forest_renoise_lvl_7.png" alt="Forest renoise lvl 7" class="content-image square-img clickable-image">
+                                <p class="content-caption">Forest t=7</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/forest_renoise_lvl_10.png" alt="Forest renoise lvl 10" class="content-image square-img clickable-image">
+                                <p class="content-caption">Forest t=10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/forest_renoise_lvl_20.png" alt="Forest renoise lvl 20" class="content-image square-img clickable-image">
+                                <p class="content-caption">Forest t=20</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.7.2 Inpainting</h3>
+                        <div class="section-description">
+                            <p>[placeholder text]</p>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/camp_inpainting.png" alt="Campanile inpainting" class="content-image square-img clickable-image">
+                                <p class="content-caption">Campanile inpaint</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.7.3 Text-Conditional Image-to-image Translation</h3>
+                        <div class="section-description">
+                            <p>[placeholder text]</p>
+                        </div>
+                        <h4>Campanile</h4>
+                        <div class="gallery-grid grid-6">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/man_camp_translation_1.png" alt="Campanile translation t=1" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/man_camp_translation_3.png" alt="Campanile translation t=3" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=3</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/man_camp_translation_5.png" alt="Campanile translation t=5" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=5</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/man_camp_translation_7.png" alt="Campanile translation t=7" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=7</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/man_camp_translation_10.png" alt="Campanile translation t=10" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/man_camp_translation_20.png" alt="Campanile translation t=20" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=20</p>
+                            </div>
+                        </div>
+
+                        <h4>Dog & Bird</h4>
+                        <div class="gallery-grid grid-6">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/dog_bird_translation_1.png" alt="Dog bird translation t=1" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/dog_bird_translation_3.png" alt="Dog bird translation t=3" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=3</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/dog_bird_translation_5.png" alt="Dog bird translation t=5" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=5</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/dog_bird_translation_7.png" alt="Dog bird translation t=7" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=7</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/dog_bird_translation_10.png" alt="Dog bird translation t=10" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/dog_bird_translation_20.png" alt="Dog bird translation t=20" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=20</p>
+                            </div>
+                        </div>
+
+                        <h4>Baljeet</h4>
+                        <div class="gallery-grid grid-6">
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/z_baljeet_translation_1.png" alt="Baljeet translation t=1" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/z_baljeet_translation_3.png" alt="Baljeet translation t=3" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=3</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/z_baljeet_translation_5.png" alt="Baljeet translation t=5" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=5</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/z_baljeet_translation_7.png" alt="Baljeet translation t=7" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=7</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/z_baljeet_translation_10.png" alt="Baljeet translation t=10" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=10</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.7/1.7.3/z_baljeet_translation_20.png" alt="Baljeet translation t=20" class="content-image square-img clickable-image">
+                                <p class="content-caption">t=20</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.8 Visual Anagrams</h3>
+                        <div class="section-description">
+                            <p>[placeholder text]</p>
+                        </div>
+                        <div class="gallery-grid grid-3">
+                            <div class="grid-item">
+                                <img src="proj5/1.8/elephant_city_abstract_art.png" alt="Visual anagram elephant city abstract" class="content-image square-img clickable-image">
+                                <p class="content-caption">Visual anagram 1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.8/monkey_typewriter_mouse_tophat.png" alt="Visual anagram monkey typewriter mouse tophat" class="content-image square-img clickable-image">
+                                <p class="content-caption">Visual anagram 2</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h3>1.9 Hybrid Images</h3>
+                        <div class="section-description">
+                            <p>[placeholder text]</p>
+                        </div>
+                        <div class="gallery-grid grid-4">
+                            <div class="grid-item">
+                                <img src="proj5/1.9/skull_waterfall_lithograph.png" alt="Hybrid skull waterfall lithograph" class="content-image square-img clickable-image">
+                                <p class="content-caption">Hybrid 1</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.9/tennis_court_night_road.png" alt="Hybrid tennis court night road" class="content-image square-img clickable-image">
+                                <p class="content-caption">Hybrid 2</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.9/old_man_christmas_wreath.png" alt="Hybrid old man christmas wreath" class="content-image square-img clickable-image">
+                                <p class="content-caption">Hybrid 3</p>
+                            </div>
+                            <div class="grid-item">
+                                <img src="proj5/1.9/download.png" alt="Hybrid download" class="content-image square-img clickable-image">
+                                <p class="content-caption">Hybrid 4</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
